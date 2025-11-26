@@ -33,11 +33,27 @@ The script performs a single full cycle and exits. Scheduling of recurring runds
 Script should finish executing in under 5 seconds. Documentation must be understandable by a non-technical user. Email must be sent once per one, even if multiple events qualify
 
 4) Data Model
-SQLite Table: earthquakes
-TBD
+CREATE TABLE IF NOT EXISTS earthquakes (
+    event_id    TEXT PRIMARY KEY,
+    time_utc    TEXT,        -- ISO 8601 string, e.g. "2025-11-25T08:15:00Z"
+    magnitude   REAL,
+    place       TEXT,
+    latitude    REAL,
+    longitude   REAL,
+    depth_km    REAL,
+    detail_url  TEXT
+);
 
-JSON -> DB Mapping
-TBD
+JSON -> DB Mapping:
+features[i].id → event_id
+features[i].properties.mag → magnitude
+features[i].properties.place → place
+features[i].properties.time → time
+features[i].properties.url → detail_url
+features[i].geometry.coordinates[1] → latitude
+features[i].geometry.coordinates[0] → longitude
+features[i].geometry.coordinates[2] → depth_km
+
 
 5) Deliverables:
 The final project must include: app.py (main script containing the workflow), requirements.txt, README.md with setup instrcutions, .env configuration instructions. How to manually run and how to schedule with Windows Task Scheduler. 

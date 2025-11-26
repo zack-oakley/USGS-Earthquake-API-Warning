@@ -11,3 +11,14 @@ Activities:
 
 Notes:
 - Planning took loner than expected
+
+
+Day 2 - 11/25/2025
+Focus: Determine necessary fields from API call. .
+    
+Total Time - 
+
+Activies
+- Identify necessary fields from API call
+- Determine SQLite Schema
+- Create initial repo structure
