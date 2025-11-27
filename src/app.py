@@ -1,8 +1,9 @@
 # Zack Oakley
 # 11/26/2025
-# Simple Flask API to retrive earthquak data from USGS
+# Flask API to retrive earthquak data from USGS
 from flask import Flask, request, jsonify
 import requests
+from .utils import extract_event_fields
 
 
 app = Flask(__name__)
@@ -16,7 +17,13 @@ def get_earthquakes():
     try:
         response = requests.get(USGS_API_URL)
         data = response.json()
-        return jsonify(data), 200
+
+        # Use util function to append all json objects into an events list
+        events = []
+        for feature in data.get("features", []):
+            events.append(extract_event_fields(feature))
+
+        return jsonify(events), 200
     except requests.RequestException as e:
         return jsonify({"error": "Failed to fetch earthquake data"}), 502
 

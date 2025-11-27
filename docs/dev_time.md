@@ -29,18 +29,24 @@ Notes:
 ------------------------------------------------------
 
 Day 3 - 11/26/2025
-Focus: Implementing data retrieval and testing
-Total Time - TBD
+Focus: Data extraction, API routing, testing infrastructure
+Total Time - 4.5 Hours
 
 Activites 
-- Implemented the /earthquakes route in app.py to fetch real-time USGS earthquake data using requests.get()
-- Created a professional unit test using Flask’s test_client() to validate the endpoint behavior
-- Confirmed that the JSON structure returned by the USGS API matches the expected format (metadata, features, geometry)
-- Set up a proper project structure (src/ and tests/) with __init__.py files for clean imports
-- Installed and configured pytest, then verified the test suite passes
+- Implemented the /earthquakes route in app.py to fetch live USGS data and transform it into event objects
+- Created utils.py and implemented extract_event_fields() to:
+    - extract nested JSON properties
+    - handle missing .get() defaults
+    - Convert epoch-millisecond timestamps into ISO-8601 UTC strings using    timezone-aware datetime
+    - Map all fields to the future SQLite schema (event_id, magnitude, place, lat/lon, depth, etc.)
+- Build a unit test extract_event_fields_test.py validating:
+    - exxtraction of all required fields for a complete USGS event
+    - Safe handling of missing or incomplete data
+- Updated existing API tests api_test.py to match the new JSON output
 
 Notes
-- Endpoint successfully returns live USGS data and integrates cleanly into the project’s API architecture
+- The system now correctly transforms raw USGS GeoJSON into a clean, database-ready format.
+- Test suite confirms robust handling of real-world data, including missing fields.
 
 ------------------------------------------------------
 

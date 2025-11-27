@@ -16,26 +16,32 @@ The goal is to simulate a real client project with a reliable end-to-end workflo
 - **Language:** Python 3
 - **Database:** SQLite (local file)
 - **Dependencies:** (to be finalized in `requirements.txt`)
-  - `requests` (HTTP requests)
+  - `requests` HTTP requests to USGS 
   - `python-dotenv` (environment variable loading)
-  - `sqlite3` (standard lib)
+  - `sqlite3` built-in SQLite database driver
 
 # Project Structure
 USGS-Earthquake-API-Warning/
 │
 ├── src/
-│   └── app.py              # Main application entry point (WIP)
+│ ├── app.py # Flask API endpoint to fetch parsed earthquakes
+│ ├── utils.py # Field extraction and JSON transformation logic
+│ └── db.py # (Upcoming) SQLite insert/retrieval logic
 │
-├── data/                   # SQLite DB + logs (ignored by git)
+├── data/
+│ └── earthquakes.db # SQLite database (git-ignored)
 │
-├── tests/                  # Future unit tests
+├── tests/
+│ ├── test_utils.py # Unit tests for extract_event_fields
+│ ├── test_db.py # Tests for DB logic 
+│ └── test_api.py # Optional: tests for the /earthquakes endpoint
 │
 ├── docs/
-│   ├── requirements.md     # Detailed project requirements/spec
-│   └── dev_time.md         # Time tracking & notes
+│ ├── requirements.md # Projects requirements & design notes
+│ └── dev_time.md # Development notes & time tracking
 │
-├── .env                    # Local environment config (not committed)
-├── config.example.env      # Example config for users
+├── .env # Environment config (not committed)
+├── config.example.env # Example environment settings
 ├── .gitignore
-├── requirements.txt        # Python dependencies
+├── requirements.txt
 └── README.md
