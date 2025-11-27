@@ -1,7 +1,6 @@
 # Tests for extract_event_fields() in src/utils.py
-# Verifies:
-# - Correct extraction of all required fields for events
-# - Proper handling of missing or null data without crashing
+#   Verifies: Correct extraction of all required fields for events.
+#   Proper handling of missing or null data without crashing
 from src.utils import extract_event_fields
 
 def test_extract_event_fields_full_event():

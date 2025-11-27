@@ -1,6 +1,6 @@
 # Zack Oakley
 # 11/26/2025
-# Flask API to retrive earthquak data from USGS
+# Flask API to retrieve earthquake data from USGS
 from flask import Flask, request, jsonify
 import requests
 from .utils import extract_event_fields

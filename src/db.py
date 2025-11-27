@@ -1,7 +1,8 @@
 # Zack Oakley
 # 11/26/2025
-# Initializes earthquakes.db, handles returning a single earthquake, and inserting 
-#   an earthquake
+# Initializes earthquakes.db, handles returning a single earthquake, inserting 
+#   an earthquake, and returns a list of dictionaries of all earthquakes above a set
+#   magnitude
 import sqlite3
 import os
 
@@ -51,7 +52,7 @@ def get_earthquake(event_id: str):
 # Inserts an earthquake record if event_id iss not already present. Retruns
 #   True if a new row was inserted
 #   False if event_id already existed
-def insert_earthquak(event: dict):
+def insert_earthquake(event: dict):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
@@ -80,12 +81,45 @@ def insert_earthquak(event: dict):
         event["depth_km"],
         event["detail_url"],
     ))
-
     conn.commit()
     conn.close()
-
-
     return True
+
+# Returns all earthquakes with magnitude >= min_magnitude  as a list of dictionaries
+def get_events_over_threshold(min_magnitude: float):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        SELECT event_id, time_utc, magnitude, place,
+               latitude, longitude, depth_km, detail_url
+        FROM earthquakes
+        WHERE magnitude >= ?
+        ORDER BY time_utc DESC;
+        """,
+        (min_magnitude,),
+    )
+
+    rows = cur.fetchall()
+    conn.close()
+
+    events = []
+    for row in rows:
+        events.append(
+            {
+                "event_id": row[0],
+                "time_utc": row[1],
+                "magnitude": row[2],
+                "place": row[3],
+                "latitude": row[4],
+                "longitude": row[5],
+                "depth_km": row[6],
+                "detail_url": row[7],
+            }
+        )
+
+    return events
 
 if __name__ == "__main__":
     init_db()
