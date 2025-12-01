@@ -91,6 +91,6 @@ Run whether user is logged on or not
 Run with highest privileges
 Your system now monitors earthquakes automatically every hour.
 
-# Example of alert email: 
+# Example of Alert Email: 
 ![Example Earthquake Alert](assets/Alert_Email.PNG)
 
