@@ -24,6 +24,7 @@ The system runs hourly via Windows Task Scheduler and is designed to simulate a 
   - Standard Library: sqlite3, datetime, json, etc
 
 # Project Structure
+```
 USGS-Earthquake-API-Warning/
 │
 ├── src/
@@ -48,7 +49,7 @@ USGS-Earthquake-API-Warning/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
-
+```
 
 
 Setup Instructions:
