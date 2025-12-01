@@ -91,10 +91,5 @@ Run with highest privileges
 Your system now monitors earthquakes automatically every hour.
 
 Example of alert email: 
-Subject: [USGS Alert] 2 earthquakes ≥ M 1.0
-
-Mag Time (UTC)        Place
---------------------------------------------------
-1.1 2025-12-01T02:47:0Z 4Km E of Big Bear City, CA
-2.0 2025-12-01T02:33:04Z 23 Km NNW of Petersville, Alaska
+![Example Earthquake Alert](assets/Alert_Email.PNG)
 
