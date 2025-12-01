@@ -52,7 +52,7 @@ USGS-Earthquake-API-Warning/
 ```
 
 
-Setup Instructions:
+# Setup Instructions:
 1) Clone the repository:
 git clone https://github.com/yourusername/USGS-Earthquake-API-Warning.git
 cd USGS-Earthquake-API-Warning
@@ -91,6 +91,6 @@ Run whether user is logged on or not
 Run with highest privileges
 Your system now monitors earthquakes automatically every hour.
 
-Example of alert email: 
+# Example of alert email: 
 ![Example Earthquake Alert](assets/Alert_Email.PNG)
 
