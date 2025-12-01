@@ -71,30 +71,15 @@ Notes
 
 ------------------------------------------------------
 
-Day 5 - 
-Focus:
-Total Time - 
+Day 5 - 11/30/2025
+Focus: Integrated threshold filtering and SMTP alerting into the earthquake ingest workflow
+Total Time - 3.5 hours
 
 Activities
+- Implemented and refined the main() function workflow within ingest.py
+- Successfully set up GMAIL SMTP authentication
+- Verified end-to-end behavior by lowering threshold, running "python -m src.ingest and comparing email of events to events shown in a POSTMAN GET request
+- Created and tested a .bat runner script and configured Windows Task Scheduler to run the ingest job hourly
 
 Notes
-
-------------------------------------------------------
-
-Day 6 - 
-Focus:
-Total Time - 
-
-Activities
-
-Notes
-
-------------------------------------------------------
-
-Day 7 - 
-Focus:
-Total Time - 
-
-Activities
-
-Notes
+- Setting up Gmail App Passwords required additional steps and took longer than expected, but was resolved successfully

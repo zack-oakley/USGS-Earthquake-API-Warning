@@ -1,47 +1,100 @@
-# USGS Earthquake Alert (Python + SQLite)
+# USGS Earthquake Alert (Python + SQLite + Email Alerts)
 
-This project is an automated Python-based monitoring system that checks for recent earthquakes using the USGS Earthquake API. It retrieves earthquake data on a scheduled basis, stores events in a local SQLite database, evaluates whether any events exceed a configurable magnitude threshold, and sends an email alert when they do.
+This project is a fully automated earthquake-monitoring pipeline that fetches recent USGS earthquake data, stores new events in a local SQLite database, evaluates them against a configurable magnitude threshold, and sends an email alert when significant earthquakes occur.
 
-The goal is to simulate a real client project with a reliable end-to-end workflow that a non-technical user could set up and run.
+The system runs hourly via Windows Task Scheduler and is designed to simulate a real-world client project with reliability, logging, and automation.
 
-# Features (Planned)
-- Fetch recent earthquakes from the USGS **All Earthquakes, Past Hour** feed
-- Parse and store events in a local **SQLite** database
-- Prevent duplicate records using the USGS event ID as a unique key
-- Compare magnitudes against a configurable **threshold** (e.g., 4.0)
-- Send a **single consolidated email** if any events exceed the threshold
-- Provide setup instructions for **Windows Task Scheduler** to run hourly
+# Features
+- Hourly automated ingestion of USGS “All Earthquakes, Past Hour” feed
+- JSON → Python dict normalization using a custom extractor
+- SQLite persistence with event-ID-based deduplication
+- Magnitude threshold filtering (configurable via .env)
+- Single consolidated alert email summarizing events ≥ the threshold
+- SMTP integration using a secure Gmail App Password
+- Windows Task Scheduler automation with a .bat runner for convenience
 
 # Tech Stack
-- **Language:** Python 3
-- **Database:** SQLite (local file)
-- **Dependencies:** (to be finalized in `requirements.txt`)
-  - `requests` HTTP requests to USGS 
-  - `python-dotenv` (environment variable loading)
-  - `sqlite3` built-in SQLite database driver
+- Python 3.12
+- SQLite (local, file-based)
+- APIs: USGS Earthquake GeoJSON Feed
+- Libraries:
+  - requests – Fetch USGS feed
+  - python-dotenv – Load configuration
+  - smtplib + email – SMTP email sending
+  - Standard Library: sqlite3, datetime, json, etc
 
 # Project Structure
 USGS-Earthquake-API-Warning/
 │
 ├── src/
-│ ├── app.py # Flask API endpoint to fetch parsed earthquakes
-│ ├── utils.py # Field extraction and JSON transformation logic
-│ └── db.py # (Upcoming) SQLite insert/retrieval logic
+│   ├── ingest.py          # Main workflow: fetch, insert, filter, email
+│   ├── utils.py           # extract_event_fields() normalization logic
+│   ├── db.py              # SQLite initialization + insert w/ dedupe
+│   ├── alert.py           # Threshold filtering logic
+│   ├── email_utils.py     # Email construction + SMTP send
+│   └── config.py          # Loads .env variables
 │
 ├── data/
-│ └── earthquakes.db # SQLite database (git-ignored)
+│   └── earthquakes.db     # SQLite database (git-ignored)
 │
-├── tests/
-│ ├── test_utils.py # Unit tests for extract_event_fields
-│ ├── test_db.py # Tests for DB logic 
-│ └── test_api.py # Optional: tests for the /earthquakes endpoint
+├── tests/                 # Various unit tests
+|   |__ alert_test.py
+|   |__ api_test.py
+|   |__ extract_event_fields_test.py                
 │
-├── docs/
-│ ├── requirements.md # Projects requirements & design notes
-│ └── dev_time.md # Development notes & time tracking
+├── run_ingest.bat         # Runs the ingest workflow (used by Task Scheduler)
 │
-├── .env # Environment config (not committed)
-├── config.example.env # Example environment settings
+├── .env                   # Environment configuration (not committed)
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+
+
+
+Setup Instructions:
+1) Clone the repository:
+git clone https://github.com/yourusername/USGS-Earthquake-API-Warning.git
+cd USGS-Earthquake-API-Warning
+
+2) Install dependencies:
+pip install -r requirements.txt
+
+3) Create a .env file
+EQ_MAGNITUDE_THRESHOLD=6
+EMAIL_USER=youraddress@gmail.com
+EMAIL_PASS=your_app_password_here
+EMAIL_TO=youraddress@gmail.com
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+
+**Gmail Note
+You must enable 2-Step Verification and create a Gmail App Password for SMTP.
+(App Passwords ≠ your Gmail password.)
+
+4) Run manually (for testing)
+python -m src.ingest
+If any earthquakes exceed the threshold, you will receive an email alert.
+
+5) Hourly Automation (Windows Task Scheduler)
+Create run_ingest.bat (already included):
+@echo off
+cd C:\Users\zacko\Portfolio\USGS-Earthquake-API-Warning
+python -m src.ingest
+
+update cd C:\Users\zacko\Portfolio\USGS-Earthquake-API-Warning to your cloned location
+
+Open Task Scheduler → Create Task
+Trigger: Repeat task every 1 hour indefinitely
+Action: Start Program → select run_ingest.bat
+Run whether user is logged on or not
+Run with highest privileges
+Your system now monitors earthquakes automatically every hour.
+
+Example of alert email: 
+Subject: [USGS Alert] 2 earthquakes ≥ M 1.0
+
+Mag Time (UTC)        Place
+--------------------------------------------------
+1.1 2025-12-01T02:47:0Z 4Km E of Big Bear City, CA
+2.0 2025-12-01T02:33:04Z 23 Km NNW of Petersville, Alaska
+
